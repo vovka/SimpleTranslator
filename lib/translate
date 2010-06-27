@@ -1,0 +1,51 @@
+#!/usr/bin/ruby
+
+require File.join File.dirname(__FILE__), 'interpreter/instructions/instructions_setter'
+require File.join File.dirname(__FILE__), 'interpreter/interpreter'
+
+module Translator
+  class Scenario
+    extend Interpreter
+    
+    class << self
+      def interpret!
+        read_scenario_from_file.collect{|instruction| instruction.strip}.each do |str|
+          interpret str if !str.nil? and !str.empty?
+        end if read_scenario_from_file
+      end
+      
+      private 
+      
+        def read_scenario_from_file
+          return @read_scenario_from_file_res if @read_scenario_from_file_res
+          if !ARGV.empty?
+            if File.exists? ARGV[0]
+              @read_scenario_from_file_res = read_file(ARGV[0]).split "\n"
+            else
+              p "File '#{ARGV[0]}' doesn't exist. "
+            end
+          else
+            puts "Please specify instructions file with command line argument, you should to use command like 'ruby main.rb /path/to/instructions/file'"
+          end
+        end
+        
+        def read_file filename
+          res = ''
+          if File.exists? filename
+            File.open(filename, "r") do |infile|
+              while (line = infile.gets)
+                res += line
+              end
+            end
+          else
+            puts "No such file - #{filename}"
+          end
+          res
+        end
+
+    end
+  end
+end
+
+Translator::Scenario.interpret!
+

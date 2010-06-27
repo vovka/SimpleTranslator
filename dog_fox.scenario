@@ -1,0 +1,6 @@
+  Given the quick brown fox jumps over the lazy dog 1 time
+  When the lazy dog waking up
+  And it get sight of the fox
+  Then it says "Bow-wow-wow!"
+  And that's all folks
+
